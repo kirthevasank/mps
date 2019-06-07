@@ -1,5 +1,8 @@
-# mps
-## Myopic Posterior Sampling for Adaptive Bayesian Design of Experiments
+# MPS
+### Myopic Posterior Sampling for Adaptive Goal Oriented Design of Experiments
+
+&nbsp;
+
 
 MPS is a general and flexible framework adaptive goal oriented design of
 experiments.
@@ -40,7 +43,7 @@ Akshay and Schneider, Jeff and Poczos, Barnabas},
 
 ### License
 This software is released under the MIT license. For more details, please refer
-[LICENSE.txt](https://github.com/dragonfly/dragonfly/blob/master/LICENSE.txt).
+[LICENSE.txt](LICENSE.txt).
 
 For questions, please email kandasamy@cs.cmu.edu.
 
