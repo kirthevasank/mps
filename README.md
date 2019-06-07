@@ -1,13 +1,12 @@
 # MPS
 ### Myopic Posterior Sampling for Adaptive Goal Oriented Design of Experiments
 
-&nbsp;
 
 
 MPS is a general and flexible framework adaptive goal oriented design of
 experiments.
 
-In adaptive  design of experiments (DoE) framework,
+In adaptive  design of experiments (DoE),
 one wishes to design a sequence of experiments and
 collect data so as to achieve a desired goal.
 While there are many algorithms for specialised settings for adaptive DoE (such as

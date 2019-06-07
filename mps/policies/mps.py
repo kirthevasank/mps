@@ -18,20 +18,20 @@ from prob.prob_distros import bayesian_disc_model_args
 from utils.oper_utils import minimise_with_method
 from utils.option_handler import get_option_specs
 
-ps_args_specific = [
-  get_option_specs('ps_num_lookahead_steps', False, 1,
+mps_args_specific = [
+  get_option_specs('mps_num_lookahead_steps', False, 1,
     'Number of steps to look-ahead when determining a point.'),
-  get_option_specs('ps_num_y_giv_x_t_samples', False, 50,
+  get_option_specs('mps_num_y_giv_x_t_samples', False, 50,
     'Number of Y|X,theta samples to approximate penalty_next.'),
-  get_option_specs('ps_penalty_minimisation_method', False, 'rand',
+  get_option_specs('mps_penalty_minimisation_method', False, 'rand',
     'Method to minimise penalty_next'),
-  get_option_specs('ps_penalty_minimisation_num_iters', False, -1,
+  get_option_specs('mps_penalty_minimisation_num_iters', False, -1,
     'Method to minimise penalty_next'),
   ]
 
-go_args_specific = ps_args_specific
+go_args_specific = mps_args_specific
 
-ps_args = ps_args_specific + bayesian_disc_model_args + edward_args_specific
+mps_args = mps_args_specific + bayesian_disc_model_args + edward_args_specific
 go_args = go_args_specific + bayesian_disc_model_args + edward_args_specific
 
 
@@ -45,7 +45,7 @@ class PSExperimentDesigner(ExperimentDesigner):
 
   def _get_policy_str(self):
     """ Describes the policy. """
-    return 'ps_%d'%(self.options.ps_num_lookahead_steps)
+    return 'mps_%d'%(self.options.mps_num_lookahead_steps)
 
   def _child_build_new_model(self):
     """ Builds a new model. """
@@ -85,7 +85,7 @@ class PSExperimentDesigner(ExperimentDesigner):
         """ This function computes the penalty by augmenting the past data with _x, _y """
         return self.penalty(_theta, _past_X + [_x], _past_Y + [_y])
       # Now compute the average and return
-      y_samples = sample_y_giv_x_t(self.options.ps_num_y_giv_x_t_samples, x, theta)
+      y_samples = sample_y_giv_x_t(self.options.mps_num_y_giv_x_t_samples, x, theta)
       penalty_vals = [_penalty_next_obs(x, y, theta, past_X, past_Y) for y in y_samples]
       return sum(penalty_vals) / float(len(penalty_vals))
 
@@ -96,15 +96,15 @@ class PSExperimentDesigner(ExperimentDesigner):
 
   def _get_num_iters_for_penalty_min(self):
     """ Returns the number of iterations for penalty minimisation. """
-    if self.options.ps_penalty_minimisation_num_iters > 0:
-      return self.options.ps_penalty_minimisation_num_iters
+    if self.options.mps_penalty_minimisation_num_iters > 0:
+      return self.options.mps_penalty_minimisation_num_iters
     else:
       return min(1000, max(50,
                  20 * self.experiment_caller.domain.get_dim() * (1 + self.step_idx)**2))
 
   def _determine_next_query(self):
     """ Determines the next point for evaluation. """
-    if self.options.ps_num_lookahead_steps > 1:
+    if self.options.mps_num_lookahead_steps > 1:
       raise NotImplementedError('Only implemented 1 look-ahead yet.')
     past_X, past_Y = self.get_past_data()
     theta = self.model.sample_t_giv_data(1, past_X, past_Y)[0]
@@ -112,11 +112,9 @@ class PSExperimentDesigner(ExperimentDesigner):
 
   def _determine_query_from_theta_and_data(self, theta, past_X, past_Y):
     """ Determines the query from a given value of theta. """
-#     print 'theta:', theta
-#     print 'past_X, past_Y:', past_X, past_Y
     penalty_next_obj = self._get_penalty_next_obj(theta, past_X, past_Y)
     _, next_experiment_point, _ = minimise_with_method(
-                                    self.options.ps_penalty_minimisation_method,
+                                    self.options.mps_penalty_minimisation_method,
                                     penalty_next_obj,
                                     self.experiment_caller.domain,
                                     self._get_num_iters_for_penalty_min(),
@@ -130,8 +128,8 @@ class PSExperimentDesigner(ExperimentDesigner):
     return [self._determine_next_query() for _ in range(batch_size)]
 
 
-# Greedy Optimal Policy which knows the true parameter ===============================
-class GOExperimentDesigner(PSExperimentDesigner):
+# Myopic Optimal Policy which knows the true parameter ===============================
+class MOExperimentDesigner(PSExperimentDesigner):
   """ Implements Posterior sampling for Experiment Design. """
 
   def _determine_next_query(self):
@@ -141,5 +139,5 @@ class GOExperimentDesigner(PSExperimentDesigner):
 
   def _get_policy_str(self):
     """ Describes the policy. """
-    return 'go_%d'%(self.options.ps_num_lookahead_steps)
+    return 'mo_%d'%(self.options.mps_num_lookahead_steps)
 
