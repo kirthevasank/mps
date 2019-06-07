@@ -11,9 +11,9 @@
 from argparse import Namespace
 import numpy as np
 # Local imports
-from utils.general_utils import map_to_bounds
-from utils.option_handler import load_options
-from utils.reporters import get_reporter
+from ..utils.general_utils import map_to_bounds
+from ..utils.option_handler import load_options
+from ..utils.reporters import get_reporter
 
 
 # Define constants

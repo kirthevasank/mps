@@ -9,7 +9,7 @@ from exd import exd_utils
 from utils.base_test_class import BaseTestClass, execute_tests
 
 
-class EDUtilsTestCase(BaseTestClass):
+class EXDUtilsTestCase(BaseTestClass):
   """ Unit tests for generic functions exd_utils.py """
 
   def setUp(self):

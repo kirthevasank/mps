@@ -14,9 +14,9 @@ from argparse import Namespace
 import numpy as np
 import time
 # Local
-from base_test_class import BaseTestClass, execute_tests
-from ancillary_utils import is_nondecreasing
-import oper_utils
+from .base_test_class import BaseTestClass, execute_tests
+from .ancillary_utils import is_nondecreasing
+from . import oper_utils
 
 # TODO: Write unit tests for Optimal Transport
 

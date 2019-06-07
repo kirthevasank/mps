@@ -9,8 +9,8 @@
 
 import numpy as np
 # Local imports
-from exd.exd_core import ExperimentDesigner, ed_core_args
-from exd.exd_utils import load_options_and_reporter
+from .exd_core import ExperimentDesigner, ed_core_args
+from .exd_utils import load_options_and_reporter
 
 goal_oriented_exd_args_specific = []
 goal_oriented_exd_args = ed_core_args + goal_oriented_exd_args_specific
@@ -36,9 +36,10 @@ class GoalOrientedExperimentDesigner(ExperimentDesigner):
     self.reward = reward
     self.reward_next = reward_next
     self.true_reward = true_reward
-    options, reporter = load_options_and_reporter(goal_oriented_exd_args, options, reporter)
-    super(GuidedExperimentDesigner, self).__init__(experiment_caller, worker_manger,
-                                                   model, options, reporter)
+    options, reporter = load_options_and_reporter(goal_oriented_exd_args, options,
+                                                  reporter)
+    super(GoalOrientedExperimentDesigner, self).__init__(experiment_caller, worker_manger,
+                                                         model, options, reporter)
 
   def _problem_set_up(self):
     """ Set up for the problem. """

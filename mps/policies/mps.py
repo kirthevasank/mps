@@ -9,24 +9,24 @@
 
 from argparse import Namespace
 # Local
-from exd.exd_core import ExperimentDesigner
+from ..exd.exd_core import ExperimentDesigner
 try:
-  from prob.edward_prob_distros import edward_args_specific
+  from ..prob.edward_prob_distros import edward_args_specific
 except ImportError:
   edward_args_specific = []
-from prob.prob_distros import bayesian_disc_model_args
-from utils.oper_utils import minimise_with_method
-from utils.option_handler import get_option_specs
+from ..prob.prob_distros import bayesian_disc_model_args
+from ..utils.oper_utils import maximise_with_method
+from ..utils.option_handler import get_option_specs
 
 mps_args_specific = [
   get_option_specs('mps_num_lookahead_steps', False, 1,
     'Number of steps to look-ahead when determining a point.'),
   get_option_specs('mps_num_y_giv_x_t_samples', False, 50,
-    'Number of Y|X,theta samples to approximate penalty_next.'),
-  get_option_specs('mps_penalty_minimisation_method', False, 'rand',
-    'Method to minimise penalty_next'),
-  get_option_specs('mps_penalty_minimisation_num_iters', False, -1,
-    'Method to minimise penalty_next'),
+    'Number of Y|X,theta samples to approximate reward_next.'),
+  get_option_specs('mps_reward_minimisation_method', False, 'rand',
+    'Method to minimise reward_next'),
+  get_option_specs('mps_reward_minimisation_num_iters', False, -1,
+    'Method to minimise reward_next'),
   ]
 
 go_args_specific = mps_args_specific
@@ -75,29 +75,29 @@ class PSExperimentDesigner(ExperimentDesigner):
     Y = self.prev_eval_vals + self.history.query_vals
     return X, Y
 
-  def _compute_penalty_next(self, x, theta, past_X, past_Y, sample_y_giv_x_t):
-    """ Computes the expected penalty if evaluated at x. """
-    if self.penalty_next is not None:
-      return self.penalty_next(x, theta, past_X, past_Y)
+  def _compute_reward_next(self, x, theta, past_X, past_Y, sample_y_giv_x_t):
+    """ Computes the expected reward if evaluated at x. """
+    if self.reward_next is not None:
+      return self.reward_next(x, theta, past_X, past_Y)
     else:
-      # This function computes the penalty by augmenting the past data with _x, _y
-      def _penalty_next_obs(_x, _y, _theta, _past_X, _past_Y):
-        """ This function computes the penalty by augmenting the past data with _x, _y """
-        return self.penalty(_theta, _past_X + [_x], _past_Y + [_y])
+      # This function computes the reward by augmenting the past data with _x, _y
+      def _reward_next_obs(_x, _y, _theta, _past_X, _past_Y):
+        """ This function computes the reward by augmenting the past data with _x, _y """
+        return self.reward(_theta, _past_X + [_x], _past_Y + [_y])
       # Now compute the average and return
       y_samples = sample_y_giv_x_t(self.options.mps_num_y_giv_x_t_samples, x, theta)
-      penalty_vals = [_penalty_next_obs(x, y, theta, past_X, past_Y) for y in y_samples]
-      return sum(penalty_vals) / float(len(penalty_vals))
+      reward_vals = [_reward_next_obs(x, y, theta, past_X, past_Y) for y in y_samples]
+      return sum(reward_vals) / float(len(reward_vals))
 
-  def _get_penalty_next_obj(self, theta, past_X, past_Y):
+  def _get_reward_next_obj(self, theta, past_X, past_Y):
     """ Returns an objective as a function of x that will compute x. """
-    return lambda x: self._compute_penalty_next(x, theta, past_X, past_Y,
+    return lambda x: self._compute_reward_next(x, theta, past_X, past_Y,
                                                 self.model.sample_y_giv_x_t)
 
-  def _get_num_iters_for_penalty_min(self):
-    """ Returns the number of iterations for penalty minimisation. """
-    if self.options.mps_penalty_minimisation_num_iters > 0:
-      return self.options.mps_penalty_minimisation_num_iters
+  def _get_num_iters_for_reward_min(self):
+    """ Returns the number of iterations for reward minimisation. """
+    if self.options.mps_reward_minimisation_num_iters > 0:
+      return self.options.mps_reward_minimisation_num_iters
     else:
       return min(1000, max(50,
                  20 * self.experiment_caller.domain.get_dim() * (1 + self.step_idx)**2))
@@ -112,12 +112,12 @@ class PSExperimentDesigner(ExperimentDesigner):
 
   def _determine_query_from_theta_and_data(self, theta, past_X, past_Y):
     """ Determines the query from a given value of theta. """
-    penalty_next_obj = self._get_penalty_next_obj(theta, past_X, past_Y)
-    _, next_experiment_point, _ = minimise_with_method(
-                                    self.options.mps_penalty_minimisation_method,
-                                    penalty_next_obj,
+    reward_next_obj = self._get_reward_next_obj(theta, past_X, past_Y)
+    _, next_experiment_point, _ = maximise_with_method(
+                                    self.options.mps_reward_minimisation_method,
+                                    reward_next_obj,
                                     self.experiment_caller.domain,
-                                    self._get_num_iters_for_penalty_min(),
+                                    self._get_num_iters_for_reward_min(),
                                     vectorised=False,
                                     )
     qinfo = Namespace(point=next_experiment_point)

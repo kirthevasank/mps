@@ -6,10 +6,10 @@
 # pylint: disable=invalid-name
 # pylint: disable=abstract-method
 
-from exd.guided_exd import GuidedExperimentDesigner
+from ..exd.guided_exd import GoalOrientedExperimentDesigner
 
 
-class Initialiser(GuidedExperimentDesigner):
+class Initialiser(GoalOrientedExperimentDesigner):
   """ Implements Random querying for Experiment Design. """
 
   def __init__(self, experiment_caller, worker_manager):

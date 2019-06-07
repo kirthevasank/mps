@@ -12,9 +12,9 @@
 from argparse import Namespace
 import numpy as np
 # Local imports
-from exd.domains import EuclideanDomain
-from exd.exd_utils import EVAL_ERROR_CODE
-from utils.general_utils import map_to_cube, map_to_bounds
+from .domains import EuclideanDomain
+from .exd_utils import EVAL_ERROR_CODE
+from ..utils.general_utils import map_to_cube, map_to_bounds
 
 _FIDEL_TOL = 1e-2
 

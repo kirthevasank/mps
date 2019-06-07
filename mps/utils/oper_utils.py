@@ -14,7 +14,7 @@ try:
   import utils.direct_fortran.direct as direct_ft_wrap
 except ImportError:
   direct_ft_wrap = None
-from utils.general_utils import map_to_bounds
+from .general_utils import map_to_bounds
 
 # Various utilities for global optimisation of *cheap* functions on Euclidean domains ====
 # A wrapper for all methods

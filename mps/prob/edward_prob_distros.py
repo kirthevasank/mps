@@ -13,9 +13,9 @@ import numpy as np
 import edward as ed
 import tensorflow as tf
 # Local
-from prob.prob_distros import BayesianDiscriminativeModel, bayesian_disc_model_args
-from utils.option_handler import get_option_specs
-from exd.exd_utils import load_options_and_reporter
+from .prob_distros import BayesianDiscriminativeModel, bayesian_disc_model_args
+from ..utils.option_handler import get_option_specs
+from ..exd.exd_utils import load_options_and_reporter
 
 edward_args_specific = [
   get_option_specs('edw_dflt_inference_method', False, 'vi',

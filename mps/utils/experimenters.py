@@ -14,7 +14,7 @@ from time import time
 import numpy as np
 from scipy.io import savemat as sio_savemat
 # Local imports
-from reporters import get_reporter
+from .reporters import get_reporter
 
 
 class BasicExperimenter(object):

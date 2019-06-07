@@ -9,8 +9,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
 # Local
-from prob import disc_prob_examples as dpe
-from utils.base_test_class import BaseTestClass, execute_tests
+from . import disc_prob_examples as dpe
+from ..utils.base_test_class import BaseTestClass, execute_tests
 
 class DiscModelBaseTestCase(object):
   """ Implements tests for all child classes. """

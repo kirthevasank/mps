@@ -9,9 +9,9 @@
 
 import numpy as np
 # Local imports
-import utils.euclidean_synthetic_functions as esf
-from utils.base_test_class import BaseTestClass, execute_tests
-from utils.ancillary_utils import get_list_of_floats_as_str
+from ..utils import euclidean_synthetic_functions as esf
+from ..utils.base_test_class import BaseTestClass, execute_tests
+from ..utils.ancillary_utils import get_list_of_floats_as_str
 
 _TOL = 1e-5
 

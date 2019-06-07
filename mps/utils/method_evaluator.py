@@ -12,7 +12,7 @@ import numpy as np
 import pickle
 from scipy.io import savemat as sio_savemat
 # Local imports
-from utils.reporters import get_reporter
+from .reporters import get_reporter
 
 # Changes to variable names from previous version
 # BasicExperimenter -> BaseMethodEvaluator

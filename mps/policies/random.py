@@ -9,8 +9,8 @@
 from argparse import Namespace
 import numpy as np
 # Local
-from exd.exd_core import ExperimentDesigner
-from utils.general_utils import map_to_bounds
+from ..exd.exd_core import ExperimentDesigner
+from ..utils.general_utils import map_to_bounds
 
 rand_args = []
 

@@ -14,9 +14,9 @@ from datetime import datetime
 import numpy as np
 import os
 # Local imports
-from exd.exd_utils import get_euclidean_initial_qinfos
-from policies.initialiser import Initialiser
-from utils.method_evaluator import BaseMethodEvaluator
+from .exd_utils import get_euclidean_initial_qinfos
+from ..policies.initialiser import Initialiser
+from ..utils.method_evaluator import BaseMethodEvaluator
 
 
 class ExDMethodEvaluator(BaseMethodEvaluator):

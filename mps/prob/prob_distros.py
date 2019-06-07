@@ -10,7 +10,7 @@
 
 import numpy as np
 # Local
-from utils.reporters import get_reporter
+from ..utils.reporters import get_reporter
 
 disc_model_args = []
 bayesian_disc_model_args = []

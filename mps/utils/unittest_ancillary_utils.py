@@ -9,7 +9,7 @@
 # pylint: disable=relative-import
 
 import ancillary_utils
-from base_test_class import BaseTestClass, execute_tests
+from .base_test_class import BaseTestClass, execute_tests
 
 
 class AncillaryUtilsTestCase(BaseTestClass):

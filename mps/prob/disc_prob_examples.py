@@ -14,10 +14,10 @@ try:
 except ImportError:
   from numpy.random import multivariate_normal
 # Local
-from exd.domains import EuclideanDomain
-from prob.prob_distros import ParametricDiscriminativeModel, BayesianDiscriminativeModel
+from ..exd.domains import EuclideanDomain
+from .prob_distros import ParametricDiscriminativeModel, BayesianDiscriminativeModel
 try:
-  from prob.edward_prob_distros import EdwardBayesianDiscriminativeModel
+  from ..prob.edward_prob_distros import EdwardBayesianDiscriminativeModel
 except ImportError:
   EdwardBayesianDiscriminativeModel = object
 

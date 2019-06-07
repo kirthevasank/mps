@@ -8,8 +8,8 @@
 
 import numpy as np
 # Local imports
-import utils.euclidean_synthetic_functions as esf
-from utils.base_test_class import BaseTestClass, execute_tests
+from ..utils import euclidean_synthetic_functions as esf
+from ..utils.base_test_class import BaseTestClass, execute_tests
 
 _TOL = 1e-5
 
