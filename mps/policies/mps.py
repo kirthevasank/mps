@@ -35,7 +35,7 @@ mps_args = mps_args_specific + bayesian_disc_model_args + edward_args_specific
 go_args = go_args_specific + bayesian_disc_model_args + edward_args_specific
 
 
-class PSExperimentDesigner(ExperimentDesigner):
+class MPSExperimentDesigner(ExperimentDesigner):
   """ Implements Posterior sampling for Experiment Design. """
 
   # Overriding some policy methods from Blackbox Optimiser ------------------------
@@ -129,7 +129,7 @@ class PSExperimentDesigner(ExperimentDesigner):
 
 
 # Myopic Optimal Policy which knows the true parameter ===============================
-class MOExperimentDesigner(PSExperimentDesigner):
+class MOExperimentDesigner(MPSExperimentDesigner):
   """ Implements Posterior sampling for Experiment Design. """
 
   def _determine_next_query(self):

@@ -383,3 +383,9 @@ class RealWorkerManager(WorkerManager):
     """ Return 0.0 as the poll time. """
     return self.poll_time
 
+
+# Some APIs
+def get_default_worker_manager():
+  """ Return Synthetic worker manager. """
+  return SyntheticWorkerManager(1, time_distro='const')
+
