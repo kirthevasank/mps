@@ -18,8 +18,6 @@ from .base_test_class import BaseTestClass, execute_tests
 from .ancillary_utils import is_nondecreasing
 from . import oper_utils
 
-# TODO: Write unit tests for Optimal Transport
-
 class DirectTestCase(BaseTestClass):
   """Unit test class for general utilities. """
 

@@ -6,11 +6,12 @@
 # pylint: disable=invalid-name
 # pylint: disable=abstract-method
 
-from ..exd.guided_exd import GoalOrientedExperimentDesigner
+from ..exd.goal_oriented_exd import GoalOrientedExperimentDesigner
 
 
 class Initialiser(GoalOrientedExperimentDesigner):
   """ Implements Random querying for Experiment Design. """
+  # pylint: disable=no-self-use
 
   def __init__(self, experiment_caller, worker_manager):
     """ Constructor. """

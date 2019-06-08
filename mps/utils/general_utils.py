@@ -53,7 +53,6 @@ def project_symmetric_to_psd_cone(M, is_symmetric=True, epsilon=0):
     try:
       eigvals, eigvecs = np.linalg.eigh(M)
     except np.linalg.LinAlgError:
-      print 'LinAlgError encountered with eigh. Defaulting to eig.'
       eigvals, eigvecs = np.linalg.eig(M)
       eigvals = np.real(eigvals)
       eigvecs = np.real(eigvecs)
@@ -70,6 +69,7 @@ def stable_cholesky(M, add_to_diag_till_psd=True):
       small value to the diagonal we can make it psd. This is what this function does.
       Use this iff you know that K should be psd. We do not check for errors.
   """
+  _printed_warning = False
   if M.size == 0:
     return M # if you pass an empty array then just return it.
   try:
@@ -85,14 +85,21 @@ def stable_cholesky(M, add_to_diag_till_psd=True):
     chol_decomp_succ = False
     while not chol_decomp_succ:
       try:
-        L = np.linalg.cholesky(M +
-            ((10**diag_noise_power) * max_M)  * np.eye(M.shape[0]))
+        diag_noise = (10 ** diag_noise_power) * max_M
+        L = np.linalg.cholesky(M + diag_noise * np.eye(M.shape[0]))
         chol_decomp_succ = True
       except np.linalg.linalg.LinAlgError:
-        print 'stable_cholesky failed with diag_noise_power=%d.'%(diag_noise_power)
+        if diag_noise_power > -9 and not _printed_warning:
+          from warnings import warn
+          warn(('Could not compute Cholesky decomposition despite adding %0.4f to the '
+                'diagonal. This is likely because the M is not positive semi-definite.')%(
+               (10**diag_noise_power) * max_M))
+          _printed_warning = True
         diag_noise_power += 1
       if diag_noise_power >= 5:
-        print '**************** Cholesky failed: Added diag noise = %e'%(diag_noise)
+        raise ValueError(('Could not compute Cholesky decomposition despite adding' +
+                          ' %0.4f to the diagonal. This is likely because the M is not ' +
+                          'positive semi-definite or has infinities/nans.')%(diag_noise))
   return L
 
 
@@ -137,15 +144,9 @@ def evaluate_strings_with_given_variables(_strs_to_execute, _variable_dict=None)
     _strs_to_execute = [_strs_to_execute]
   else:
     _got_list_of_constraints = True
-  # Now set local variables
-  print(locals())
   for _key, _value in _variable_dict.items():
     locals()[_key] = _value
-  print(locals())
-  import pdb; pdb.set_trace()
   _ret = [eval(_elem) for _elem in _strs_to_execute]
-  print(ret)
-  import pdb; pdb.set_trace()
   if _got_list_of_constraints:
     return _ret
   else:

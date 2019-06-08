@@ -16,6 +16,7 @@ except ImportError:
   direct_ft_wrap = None
 from .general_utils import map_to_bounds
 
+
 # Various utilities for global optimisation of *cheap* functions on Euclidean domains ====
 # A wrapper for all methods
 def maximise_with_method(method, obj, domain, max_evals, return_history=False,
