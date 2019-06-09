@@ -11,12 +11,17 @@ one wishes to design a sequence of experiments and
 collect data so as to achieve a desired goal.
 While there are many algorithms for specialised settings for adaptive DoE (such as
 optimisation, active learning, level set estimation etc.), MPS aims to provide
-a general framework that encompasses a broad variety of the problems.
-
+a general framework that encompasses a broad variety of problems, including those
+mentioned above.
 To do so, one must specifiy their goal via a reward function.
 For more details, see our
 [paper](http://www.cs.cmu.edu/~kkandasa/pubs/kandasamyICML19mps.pdf).
 
+This library
+is compatible with Python2 (>= 2.7) and Python3 (>= 3.5) and has been tested on Linux
+and macOS platforms.
+
+&nbsp;
 
 ### Installation \& Getting Started
 
@@ -26,10 +31,19 @@ $ git clone https://github.com/kirthevasank/mps
 $ cd mps
 $ python setup.py install
 ```
-We have provided a few examples in the
+Once done, you may test the installation by importing `mps` in the python shell.
+```bash
+$ python
+$ import mps
+```
+
+To help get started,
+we have provided a few example scripts in the
 [examples](examples) directory.
-Simply `cd examples` and execute those examples via
-`python al_linear_rbf.py` etc.
+Simply `cd examples` and run the script using python,
+e.g.  `python al_linear_rbf.py`.
+
+&nbsp;
 
 
 ### Acknowledgements
