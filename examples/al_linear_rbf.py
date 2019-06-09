@@ -1,5 +1,5 @@
 """
-  Unit test for PSExperimentDesigner with LinearRBF.
+  An active learning example using linear regression.
   -- rrz@andrew.cmu.edu
 """
 

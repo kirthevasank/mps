@@ -7,11 +7,17 @@
 # pylint: disable=abstract-class-not-used
 # pylint: disable=abstract-class-little-used
 
+from __future__ import print_function
+from __future__ import division
+
 from argparse import Namespace
 from multiprocessing import Process
 import numpy as np
 import os
-from sets import Set
+try:
+  from sets import Set
+except ImportError:
+  Set = set
 import shutil
 import time
 # Local
@@ -274,7 +280,7 @@ class RealWorkerManager(WorkerManager):
         result = read_in
         break
       except:
-        print 'Encountered error when reading %s. Trying again.'%(result_file_name)
+        print('Encountered error when reading %s. Trying again.'%(result_file_name))
         time.sleep(self.poll_time)
         file_reader.close()
         result = EVAL_ERROR_CODE
@@ -343,7 +349,7 @@ class RealWorkerManager(WorkerManager):
     if self.qinfos_in_progress[worker_id] is not None:
       err_msg = 'qinfos_in_progress: %s,\nfree_workers: %s.'%(
                    str(self.qinfos_in_progress), str(self.free_workers))
-      print err_msg
+      print(err_msg)
       raise ValueError('Check if worker is free before sending experiment.')
     # First add all the data to qinfo
     qinfo.worker_id = worker_id

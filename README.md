@@ -20,6 +20,18 @@ For more details, see our
 
 ### Installation \& Getting Started
 
+This library can be installed via the following commands.
+```bash
+$ git clone https://github.com/kirthevasank/mps
+$ cd mps
+$ python setup.py install
+```
+We have provided a few examples in the
+[examples](examples) directory.
+Simply `cd examples` and execute those examples via
+`python al_linear_rbf.py` etc.
+
+
 ### Acknowledgements
 Research and development of the methods in this package were funded by
 the Toyota Research Institute, Accelerated Materials Design & Discovery (AMDD) program.
