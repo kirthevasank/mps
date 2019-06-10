@@ -5,6 +5,7 @@
 """
 
 import sys
+from io import IOBase
 
 def get_reporter(reporter):
   """ Returns a reporter based on what was passed as argument. If reporter is already
@@ -17,7 +18,7 @@ def get_reporter(reporter):
       reporter = SilentReporter()
     else:
       raise ValueError('If reporter is string, it should be "default" or "silent".')
-  elif isinstance(reporter, file):
+  elif isinstance(reporter, IOBase):
     return BasicReporter(reporter)
   elif reporter is None:
     reporter = SilentReporter()

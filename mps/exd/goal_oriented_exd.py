@@ -43,21 +43,21 @@ class GoalOrientedExperimentDesigner(ExperimentDesigner):
 
   def _problem_set_up(self):
     """ Set up for the problem. """
-    self.curr_best_reward = np.inf
-    self.curr_reward = np.inf
+    self.curr_best_reward = -np.inf
+    self.curr_reward = -np.inf
     # Set up history
-    self.history.curr_best_penalties = []
-    self.history.curr_penalties = []
+    self.history.curr_best_reward = []
+    self.history.curr_reward = []
 
   def _get_problem_str(self):
     """ Return a string describing the problem. Can be overridden by a child method. """
-    return 'goal_oriented'
+    return ''
 
   def _problem_update_history(self, _):
     """ Updates the history with some statistics relevant to the problem. """
     self._update_reward_values()
-    self.history.curr_penalties.append(self.curr_reward)
-    self.history.curr_best_penalties.append(self.curr_best_reward)
+    self.history.curr_reward.append(self.curr_reward)
+    self.history.curr_best_reward.append(self.curr_best_reward)
 
   def _update_reward_values(self):
     """ Updates the reward values. """
@@ -68,12 +68,12 @@ class GoalOrientedExperimentDesigner(ExperimentDesigner):
     else:
       self.curr_reward = np.nan
     # Update the best reward
-    if self.curr_reward < self.curr_best_reward:
+    if self.curr_reward > self.curr_best_reward:
       self.curr_best_reward = self.curr_reward
 
   def _get_problem_report_results_str(self):
     """ Returns a string reporting status on the problem. """
-    return 'curr_pen: %0.3f, best_pen: %0.3f'%(self.curr_reward, self.curr_best_reward)
+    return 'curr_rew: %0.3f, best_rew: %0.3f'%(self.curr_reward, self.curr_best_reward)
 
   def _problem_handle_prev_evals(self):
     """ Handles previous evaluations for the problem. Assumes that self.prev_eval_points

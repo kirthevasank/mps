@@ -31,12 +31,14 @@ $ git clone https://github.com/kirthevasank/mps
 $ cd mps
 $ python setup.py install
 ```
+**Testing the installation:**
 Once done, you may test the installation by importing `mps` in the python shell.
 ```bash
 $ python
 $ import mps
 ```
 
+**Getting started:**
 To help get started,
 we have provided a few example scripts in the
 [examples](examples) directory.

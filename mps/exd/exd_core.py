@@ -120,8 +120,9 @@ class ExperimentDesigner(object):
       }
     # Post child set up.
     policy_prefix = 'asy' if self.is_asynchronous() else 'syn'
-    self.full_policy_name = policy_prefix + '-' + self._get_policy_str() + '-' + \
-                            self._get_problem_str()
+    _problem_str = self._get_problem_str()
+    _problem_str = '' if len(_problem_str) == 0 else ('-' + _problem_str)
+    self.full_policy_name = policy_prefix + '-' + self._get_policy_str() + _problem_str
     self.history.full_policy_name = self.full_policy_name
     # Set pre_eval_points and results
     self.prev_eval_points = []
@@ -178,7 +179,8 @@ class ExperimentDesigner(object):
     self.history.job_idxs_of_workers[qinfo.worker_id].append(qinfo.step_idx)
     self.history.query_qinfos.append(qinfo) # Save the qinfo
     # Now store in history
-    for qinfo_name, history_name in self.to_copy_from_qinfo_to_history.iteritems():
+    for qinfo_name in self.to_copy_from_qinfo_to_history.keys():
+      history_name = self.to_copy_from_qinfo_to_history[qinfo_name]
       attr_list = getattr(self.history, history_name)
       attr_list.append(getattr(qinfo, qinfo_name))
     # Do any child update

@@ -29,10 +29,10 @@ mps_args_specific = [
     'Method to minimise reward_next'),
   ]
 
-go_args_specific = mps_args_specific
+mo_args_specific = mps_args_specific
 
 mps_args = mps_args_specific + bayesian_disc_model_args + edward_args_specific
-go_args = go_args_specific + bayesian_disc_model_args + edward_args_specific
+mo_args = mo_args_specific + bayesian_disc_model_args + edward_args_specific
 
 
 class MPSExperimentDesigner(ExperimentDesigner):
@@ -129,8 +129,8 @@ class MPSExperimentDesigner(ExperimentDesigner):
 
 
 # Myopic Optimal Policy which knows the true parameter ===============================
-class MOExperimentDesigner(MPSExperimentDesigner):
-  """ Implements Posterior sampling for Experiment Design. """
+class MyopicOracleExperimentDesigner(MPSExperimentDesigner):
+  """ The myopically optimal oracle policy which knows system characteristics. """
 
   def _determine_next_query(self):
     """ Determines the next query usint true_theta. """

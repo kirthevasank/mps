@@ -20,6 +20,7 @@ from mps.exd.experiment_caller import EuclideanFunctionCaller
 from mps.prob.disc_prob_examples import BayesianLinearRBF
 from mps.policies import mps
 from mps.policies import random
+from mps import load_options_for_policy
 
 
 def get_problem_params(options=None, reporter=None):
@@ -76,26 +77,26 @@ class LinearRBFProblem(GoalOrientedExperimentDesigner):
   """ Describes the problem for active learning. """
 
   def __init__(self, experiment_caller, worker_manager, model, true_theta,
-               options=None, reporter=None, *args, **kwargs):
+               options=None, reporter='default', *args, **kwargs):
     """ Constructor. """
     self.true_theta = true_theta
     super(LinearRBFProblem, self).__init__(experiment_caller, worker_manager, model,
-         self._penalty, self._true_penalty, options=options, reporter=reporter,
+         self._reward, self._true_reward, options=options, reporter=reporter,
          *args, **kwargs)
 
-  def _penalty(self, theta, X, Y):
-    """ The penalty function. """
+  def _reward(self, theta, X, Y):
+    """ The reward function. """
     if len(X) == 0:
       return np.inf
     raw_X = self.experiment_caller.get_raw_domain_coords(X)
     est_theta = compute_least_squares_est(self.model.centers, self.model.var, raw_X, Y)
     norm_err = (theta - est_theta) / (self.true_theta + 0.001)
-    ret = np.linalg.norm(norm_err)**2
-    return ret
+    neg_ret = np.linalg.norm(norm_err)**2
+    return - neg_ret
 
-  def _true_penalty(self, X, Y):
-    """ The True penalty. """
-    return self._penalty(self.true_theta, X, Y)
+  def _true_reward(self, X, Y):
+    """ The True reward. """
+    return self._reward(self.true_theta, X, Y)
 
 
 # The following classes inherit the problem and policy classes ==========================
@@ -103,7 +104,7 @@ class LinearRBFActiveLearnerMPS(LinearRBFProblem, mps.MPSExperimentDesigner):
   """ Active Learning on the LinearRBF Model with Posterior Sampling. """
   pass
 
-class LinearRBFActiveLearnerGO(LinearRBFProblem, mps.GOExperimentDesigner):
+class LinearRBFActiveLearnerMO(LinearRBFProblem, mps.MyopicOracleExperimentDesigner):
   """ Active Learning on the LinearRBF Model with Posterior Sampling using the
       Oracle policy. """
   pass
@@ -120,9 +121,28 @@ def main():
   true_theta, model, experiment_caller = get_problem_params()
   worker_manager = SyntheticWorkerManager(1)
 
+  # Random sampling
+  print('\nRandom designer:')
+  worker_manager.reset()
+  rand_options = load_options_for_policy('rand')
+  rand_designer = LinearRBFActiveLearnerRandom(experiment_caller, worker_manager,
+                                               model, true_theta, options=rand_options)
+  rand_designer.run_experiments(budget)
+
+  # Random sampling
+  print('\nOracle designer:')
+  worker_manager.reset()
+  mo_options = load_options_for_policy('mo')
+  mo_designer = LinearRBFActiveLearnerMO(experiment_caller, worker_manager,
+                                         model, true_theta, options=mo_options)
+  mo_designer.run_experiments(budget)
+
   # Posterior sampling
+  print('\nMPS designer:')
+  worker_manager.reset()
+  mps_options = load_options_for_policy('mps')
   mps_designer = LinearRBFActiveLearnerMPS(experiment_caller, worker_manager,
-                                           model, true_theta)
+                                           model, true_theta, options=mps_options)
   mps_designer.run_experiments(budget)
 
 

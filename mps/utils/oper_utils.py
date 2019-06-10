@@ -5,6 +5,8 @@
 
 # pylint: disable=invalid-name
 
+from __future__ import print_function
+
 from argparse import Namespace
 from datetime import datetime
 import numpy as np
@@ -100,7 +102,7 @@ def direct_ft_minimise(obj, bounds, max_evals,
     report_str = 'Attempted to use direct, but fortran library could not be imported.'
     if alternative_if_direct_not_loaded is None:
       report_str += ' Alternative not specified. Raising exception.'
-      print report_str
+      print(report_str)
       raise Exception(report_str)
     elif alternative_if_direct_not_loaded.lower().startswith('rand'):
       report_str += 'Using random optimiser.'
