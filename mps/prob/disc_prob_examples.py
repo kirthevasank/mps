@@ -17,7 +17,7 @@ except ImportError:
 from ..exd.domains import EuclideanDomain
 from .prob_distros import ParametricDiscriminativeModel, BayesianDiscriminativeModel
 try:
-  from ..prob.edward_prob_distros import EdwardBayesianDiscriminativeModel
+  from .edward_prob_distros import EdwardBayesianDiscriminativeModel
 except ImportError:
   EdwardBayesianDiscriminativeModel = object
 
@@ -81,6 +81,7 @@ class BayesianLogisticWithGaussianNoise(EdwardBayesianDiscriminativeModel):
     if t_domain is None:
       t_domain = EuclideanDomain([[-np.inf, np.inf]] * 3 + [[0, np.inf]])
     y_domain = EuclideanDomain([[-np.inf, np.inf]])
+    print(type(self))
     super(BayesianLogisticWithGaussianNoise, self).__init__(y_domain, x_domain, t_domain,
                                                             prior_info, *args, **kwargs)
 
